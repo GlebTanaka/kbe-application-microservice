@@ -1,7 +1,7 @@
-package de.htwberlin.f4.applicationmicroservice.services;
+package de.htwberlin.f4.applicationmicroservice.product.services;
 
-import de.htwberlin.f4.applicationmicroservice.Product;
-import de.htwberlin.f4.applicationmicroservice.dao.ProductRepository;
+import de.htwberlin.f4.applicationmicroservice.product.Product;
+import de.htwberlin.f4.applicationmicroservice.product.dao.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

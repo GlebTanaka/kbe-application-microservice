@@ -1,4 +1,4 @@
-package de.htwberlin.f4.applicationmicroservice;
+package de.htwberlin.f4.applicationmicroservice.product;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 

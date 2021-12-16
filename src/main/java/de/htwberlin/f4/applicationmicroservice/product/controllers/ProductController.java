@@ -1,7 +1,7 @@
-package de.htwberlin.f4.applicationmicroservice.controllers;
+package de.htwberlin.f4.applicationmicroservice.product.controllers;
 
-import de.htwberlin.f4.applicationmicroservice.Product;
-import de.htwberlin.f4.applicationmicroservice.services.ProductService;
+import de.htwberlin.f4.applicationmicroservice.product.Product;
+import de.htwberlin.f4.applicationmicroservice.product.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
