@@ -1,6 +1,6 @@
-package de.htwberlin.f4.applicationmicroservice.product.dao;
+package de.htwberlin.f4.applicationmicroservice.dao;
 
-import de.htwberlin.f4.applicationmicroservice.product.Product;
+import de.htwberlin.f4.applicationmicroservice.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package de.htwberlin.f4.applicationmicroservice.product.configuration;
+package de.htwberlin.f4.applicationmicroservice.configuration;
 
-import de.htwberlin.f4.applicationmicroservice.product.Product;
-import de.htwberlin.f4.applicationmicroservice.product.dao.ProductRepository;
+import de.htwberlin.f4.applicationmicroservice.models.Product;
+import de.htwberlin.f4.applicationmicroservice.dao.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
