@@ -2,6 +2,8 @@ package de.htwberlin.f4.applicationmicroservice.services;
 
 import de.htwberlin.f4.applicationmicroservice.dao.ProductRepository;
 import de.htwberlin.f4.applicationmicroservice.models.Product;
+import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +32,8 @@ public class ProductService {
      * Methode um alles Produkte vom DAO zu erfragen
      * @return List<Product> Liste aller Produkte
      */
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<SimpleProduct> getProducts() {
+        return productRepository.findAllSimpleProducts();
     }
 
     /**

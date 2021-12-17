@@ -1,6 +1,7 @@
 package de.htwberlin.f4.applicationmicroservice.controllers;
 
 import de.htwberlin.f4.applicationmicroservice.models.Product;
+import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
 import de.htwberlin.f4.applicationmicroservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class ProductController {
      * @return List<Product> Liste aller Produkte
      */
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<SimpleProduct>> getAllProducts() {
         return ResponseEntity.ok(productService.getProducts());
     }
 
