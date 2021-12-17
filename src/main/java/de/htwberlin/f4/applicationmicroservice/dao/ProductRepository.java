@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/**
+ * Klasse als DAO fuer Product
+ */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 }

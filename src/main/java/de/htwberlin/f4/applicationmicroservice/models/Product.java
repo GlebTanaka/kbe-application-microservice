@@ -6,6 +6,9 @@ import org.springframework.web.client.RestTemplate;
 import javax.persistence.*;
 import java.util.UUID;
 
+/**
+ * Model der Entitaet Product
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -45,6 +48,15 @@ public class Product {
     @Transient
     private Double mehrwertsteuer;
 
+    /**
+     * Konstructor mit begrenzten Parametern.
+     * @param name String Name des Produktes
+     * @param description String Beschreibung des Produktes
+     * @param size String Groeße des Produktes
+     * @param color String Farbe des Produktes
+     * @param price Double Netto Betrag des Produktes
+     * @param weight Double Gewicht des Produktes
+     */
     public Product(String name, String description, String size, String color, Double price, Double weight) {
         this.name = name;
         this.description = description;
@@ -54,6 +66,10 @@ public class Product {
         this.weight = weight;
     }
 
+    /**
+     * Liefert die Mehrwertsteur vom Produkt
+     * @return Double die errechnete Mehrwertsteuer
+     */
     public Double getMehrwertsteuer() {
         String price = this.getPrice().toString();
         final String uri = "http://localhost:8081/api/v1/calculator/calculatemehrwertsteuer?preis=" + price;

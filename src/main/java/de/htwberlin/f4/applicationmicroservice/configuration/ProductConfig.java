@@ -8,9 +8,17 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * Konfigurationsklasse um Produkte zu generieren
+ */
 @Configuration
 public class ProductConfig {
 
+    /**
+     * Methode, die 10 Produkte erzeugt und sie speichert.
+     * @param productRepository ProductRepository das DAO
+     * @return void
+     */
     @Bean
     CommandLineRunner commandLineRunner(ProductRepository productRepository) {
         return args -> {
