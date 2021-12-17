@@ -1,7 +1,6 @@
 package de.htwberlin.f4.applicationmicroservice.models;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -67,14 +66,18 @@ public class Product {
     }
 
     /**
-     * Liefert die Mehrwertsteur vom Produkt
-     * @return Double die errechnete Mehrwertsteuer
+     * @return Double return the mehrwertsteuer
      */
     public Double getMehrwertsteuer() {
-        String price = this.getPrice().toString();
-        final String uri = "http://localhost:8081/api/v1/calculator/calculatemehrwertsteuer?preis=" + price;
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(uri, Double.class);
+        return mehrwertsteuer;
     }
+
+    /**
+     * @param mehrwertsteuer the mehrwertsteuer to set
+     */
+    public void setMehrwertsteuer(Double mehrwertsteuer) {
+        this.mehrwertsteuer = mehrwertsteuer;
+    }
+
 }
 
