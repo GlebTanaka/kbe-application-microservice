@@ -1,7 +1,9 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class CalculatorService {
     /**
      * Liefert die Mehrwertsteur vom Produkt

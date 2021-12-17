@@ -18,14 +18,16 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CalculatorService calculatorService;
 
     /**
      * Konstruktor mit Parameter
      * @param productRepository ProductRepository das DAO
      */
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CalculatorService calculatorService) {
         this.productRepository = productRepository;
+        this.calculatorService = calculatorService;
     }
 
     /**
@@ -43,7 +45,8 @@ public class ProductService {
      * @throws NoSuchElementException wenn kein Produkt mit der id uebereinstimmt
      */
     public Product getProduct(UUID uuid) throws NoSuchElementException {
-        return productRepository.findById(uuid).orElseThrow();
+        Product product = productRepository.findById(uuid).orElseThrow();
+        product.setMehrwertsteuer(calculatorService.getMehrwertsteuer(product.getPrice()));
     }
 }
 
