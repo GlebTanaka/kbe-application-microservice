@@ -4,7 +4,10 @@ import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,17 +24,17 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(){
+    public ResponseEntity<List<Product>> getAllProducts() {
         return ResponseEntity.ok(productService.getProducts());
     }
-    
+
     @GetMapping("/{uuid}")
-    public ResponseEntity<Product> getOneProduct(@PathVariable UUID uuid){
+    public ResponseEntity<Product> getOneProduct(@PathVariable UUID uuid) {
         return ResponseEntity.ok(productService.getProduct(uuid));
     }
 
     @GetMapping("/export")
-    public void exportProduktToCSV(){
+    public void exportProduktToCSV() {
         //TODO: call export method from Service
     }
 }
