@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -19,6 +21,10 @@ public class ProductService {
 
     public List<Product> getProducts() {
         return productRepository.findAll();
+    }
+
+    public Product getProduct(UUID uuid) throws NoSuchElementException {
+        return productRepository.findById(uuid).orElseThrow();
     }
 }
 

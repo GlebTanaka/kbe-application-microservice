@@ -3,9 +3,11 @@ package de.htwberlin.f4.applicationmicroservice.product.controllers;
 import de.htwberlin.f4.applicationmicroservice.product.Product;
 import de.htwberlin.f4.applicationmicroservice.product.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/v1/product")
@@ -19,8 +21,17 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getProducts() {
-        return productService.getProducts();
+    public ResponseEntity<List<Product>> getAllProducts(){
+        return ResponseEntity.ok(productService.getProducts());
+    }
+    
+    @GetMapping("/{uuid}")
+    public ResponseEntity<Product> getOneProduct(@PathVariable UUID uuid){
+        return ResponseEntity.ok(productService.getProduct(uuid));
+    }
 
+    @GetMapping("/export")
+    public void exportProduktToCSV(){
+        //TODO: call export method from Service
     }
 }
