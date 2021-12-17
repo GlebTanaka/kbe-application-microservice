@@ -47,6 +47,7 @@ public class ProductService {
     public Product getProduct(UUID uuid) throws NoSuchElementException {
         Product product = productRepository.findById(uuid).orElseThrow();
         product.setMehrwertsteuer(calculatorService.getMehrwertsteuer(product.getPrice()));
+        return product;
     }
 }
 
