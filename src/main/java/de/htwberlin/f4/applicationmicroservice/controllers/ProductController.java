@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ public class ProductController {
      * @return Product welches erfagt wird
      */
     @GetMapping("/{uuid}")
-    public ResponseEntity<Product> getOneProduct(@PathVariable UUID uuid) {
+    public ResponseEntity<Product> getOneProduct(@PathVariable UUID uuid) throws IOException {
         return ResponseEntity.ok(productService.getProduct(uuid));
     }
 

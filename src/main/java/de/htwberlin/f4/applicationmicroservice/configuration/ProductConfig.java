@@ -28,7 +28,8 @@ public class ProductConfig {
                     "L",
                     "Türkis",
                     50.00,
-                    0.20
+                    0.20,
+                    "Berlin"
             );
 
             Product product02 = new Product(
@@ -37,7 +38,8 @@ public class ProductConfig {
                     "S",
                     "Blau",
                     120.00,
-                    1.00
+                    1.00,
+                    "Tokyo"
             );
 
             Product product03 = new Product(
@@ -46,7 +48,8 @@ public class ProductConfig {
                     "M",
                     "Orange",
                     199.90,
-                    0.50
+                    0.50,
+                    "Wellington"
             );
 
             Product product04 = new Product(
@@ -55,7 +58,8 @@ public class ProductConfig {
                     "38",
                     "Pink",
                     30.00,
-                    0.20
+                    0.20,
+                    "Rom"
             );
 
             Product product05 = new Product(
@@ -64,7 +68,8 @@ public class ProductConfig {
                     "XXL",
                     "Gelb",
                     340.00,
-                    2.50
+                    2.50,
+                    "Kapstadt"
             );
 
             Product product06 = new Product(
@@ -73,7 +78,8 @@ public class ProductConfig {
                     "XL",
                     "Grün",
                     250.00,
-                    0.10
+                    0.10,
+                    "New York"
             );
 
             Product product07 = new Product(
@@ -82,7 +88,8 @@ public class ProductConfig {
                     "XS",
                     "Rot",
                     420.00,
-                    0.20
+                    0.20,
+                    "Peking"
             );
 
             Product product08 = new Product(
@@ -91,7 +98,8 @@ public class ProductConfig {
                     "40-42",
                     "Lila",
                     12.90,
-                    0.05
+                    0.05,
+                    "London"
             );
 
             Product product09 = new Product(
@@ -100,7 +108,8 @@ public class ProductConfig {
                     "XXXL",
                     "Weiß",
                     70.00,
-                    0.30
+                    0.30,
+                    "Dublin"
             );
 
             Product product10 = new Product(
@@ -109,7 +118,8 @@ public class ProductConfig {
                     "45",
                     "Schwarz",
                     90.00,
-                    0.30
+                    0.30,
+                    "Paris"
             );
 
             productRepository.saveAll(
