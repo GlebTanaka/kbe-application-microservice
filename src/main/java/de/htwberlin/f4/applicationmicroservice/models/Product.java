@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter(value = AccessLevel.PACKAGE)
+@Setter(value = AccessLevel.PUBLIC)
 @Entity
 @Table
 public class Product {
@@ -63,20 +63,6 @@ public class Product {
         this.color = color;
         this.price = price;
         this.weight = weight;
-    }
-
-    /**
-     * @return Double return the mehrwertsteuer
-     */
-    public Double getMehrwertsteuer() {
-        return mehrwertsteuer;
-    }
-
-    /**
-     * @param mehrwertsteuer the mehrwertsteuer to set
-     */
-    public void setMehrwertsteuer(Double mehrwertsteuer) {
-        this.mehrwertsteuer = mehrwertsteuer;
     }
 
 }
