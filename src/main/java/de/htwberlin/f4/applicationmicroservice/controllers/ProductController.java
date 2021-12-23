@@ -3,6 +3,8 @@ package de.htwberlin.f4.applicationmicroservice.controllers;
 import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
 import de.htwberlin.f4.applicationmicroservice.services.ProductService;
+
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +49,7 @@ public class ProductController {
      * @return Product welches erfagt wird
      */
     @GetMapping("/{uuid}")
-    public ResponseEntity<Product> getOneProduct(@PathVariable UUID uuid) throws IOException {
+    public ResponseEntity<Product> getOneProduct(@PathVariable @NotNull UUID uuid) throws IOException {
         return ResponseEntity.ok(productService.getProduct(uuid));
     }
 
