@@ -45,9 +45,6 @@ public class Product {
     private Double price;
     @Column(name = "weight", nullable = false)
     private Double weight;
-    //TODO auslagern in Storage micorservice. Beim Auslagern aus dem Konstruktor und ProductConfig entfernen
-    @Column(name = "place", nullable = false, columnDefinition = "TEXT")
-    private String place;
     @Transient
     private Double mehrwertsteuer;
     @Transient
@@ -64,14 +61,13 @@ public class Product {
      * @param price Double Netto Betrag des Produktes
      * @param weight Double Gewicht des Produktes
      */
-    public Product(String name, String description, String size, String color, Double price, Double weight, String place) {
+    public Product(String name, String description, String size, String color, Double price, Double weight) {
         this.name = name;
         this.description = description;
         this.size = size;
         this.color = color;
         this.price = price;
         this.weight = weight;
-        this.place = place;
     }
 
 }
