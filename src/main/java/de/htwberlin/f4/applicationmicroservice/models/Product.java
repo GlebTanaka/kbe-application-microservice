@@ -46,6 +46,8 @@ public class Product {
     @Column(name = "weight", nullable = false)
     private Double weight;
     @Transient
+    private String place;
+    @Transient
     private Double mehrwertsteuer;
     @Transient
     private String formattedAddress; // Anstelle kann man auch lat und lng, oder andere Komponeten aus der Google API erfragen
