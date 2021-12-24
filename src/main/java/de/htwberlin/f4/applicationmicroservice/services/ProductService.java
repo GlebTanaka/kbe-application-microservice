@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -21,22 +23,27 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CalculatorService calculatorService;
     private final GoogleMapsService googleMapsService;
+    private final StorageService storageService;
 
     /**
      * Konstruktor mit Parameter
+     *
      * @param productRepository ProductRepository das DAO
      * @param calculatorService
      * @param googleMapsService
+     * @param storageService
      */
     @Autowired
-    public ProductService(ProductRepository productRepository, CalculatorService calculatorService, GoogleMapsService googleMapsService) {
+    public ProductService(ProductRepository productRepository, CalculatorService calculatorService, GoogleMapsService googleMapsService, StorageService storageService) {
         this.productRepository = productRepository;
         this.calculatorService = calculatorService;
         this.googleMapsService = googleMapsService;
+        this.storageService = storageService;
     }
 
     /**
      * Methode um alles Produkte vom DAO zu erfragen
+     *
      * @return List<Product> Liste aller Produkte
      */
     public List<SimpleProduct> getProducts() {
@@ -45,17 +52,33 @@ public class ProductService {
 
     /**
      * Methode um ein spezifischen Produkt vom DAO zu erfragen
+     *
      * @param uuid UUID Suchparameter
      * @return Product das erfagte Product
      * @throws NoSuchElementException wenn kein Produkt mit der id uebereinstimmt
      */
     public Product getProduct(UUID uuid) throws NoSuchElementException, IOException {
         Product product = productRepository.findById(uuid).orElseThrow();
-        product.setMehrwertsteuer(calculatorService.getMehrwertsteuer(product.getPrice()));
-        product.setFormattedAddress(googleMapsService
-                .getGeocode(product.getPlace())
-                .getResults().get(0)
-                .getFormattedAddress());
+        product.setMehrwertsteuer(
+                calculatorService
+                        .getMehrwertsteuer(
+                                product.getPrice()));
+        //TODO Abhaengigkeit von Reihnfolge. setPlace() muss vor setFormattedAddress() kommen.
+        product.setPlace(
+                storageService
+                        .getStorage(uuid).getPlace());
+
+        product.setFormattedAddress(
+                googleMapsService
+                        .getGeocode(product.getPlace())
+                        .getResults().get(0)
+                        .getFormattedAddress());
+
+        // Variables to calculate delivery date
+        Integer interval = storageService.getStorage(uuid).getDuration();
+        LocalDateTime start = LocalDateTime.now();
+        product.setDeliveryDate(start.plus(Duration.ofDays(interval)));
+
         return product;
     }
 }
