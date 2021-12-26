@@ -50,6 +50,15 @@ public class ProductService {
         return productRepository.findAllSimpleProducts();
     }
 
+    //TODO eventuell unnoetig? wird nur intern vom exportProduktToCSV() genutzt
+    /**
+     * Liefert alle Produkte mit allen Attributen aus der Datenbank
+     * @return List<Product> Liste aller Produkte mit allen gespeicherten Attributen
+     */
+    public List<Product> listAll() {
+        return productRepository.findAll();
+    }
+
     /**
      * Methode um ein spezifischen Produkt vom DAO zu erfragen
      *
@@ -78,6 +87,8 @@ public class ProductService {
         Integer interval = storageService.getStorage(uuid).getDuration();
         LocalDateTime start = LocalDateTime.now();
         product.setDeliveryDate(start.plus(Duration.ofDays(interval)));
+
+        product.setAmount(storageService.getStorage(uuid).getAmount());
 
         return product;
     }

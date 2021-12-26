@@ -46,6 +46,8 @@ public class Product {
     @Column(name = "weight", nullable = false)
     private Double weight;
     @Transient
+    private Integer amount;
+    @Transient
     private String place;
     @Transient
     private Double mehrwertsteuer;
