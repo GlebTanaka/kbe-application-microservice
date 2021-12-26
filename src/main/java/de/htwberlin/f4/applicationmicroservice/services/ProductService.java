@@ -4,6 +4,7 @@ import de.htwberlin.f4.applicationmicroservice.dao.ProductRepository;
 import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
 
+import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +56,23 @@ public class ProductService {
      * Liefert alle Produkte mit allen Attributen aus der Datenbank
      * @return List<Product> Liste aller Produkte mit allen gespeicherten Attributen
      */
-    public List<Product> listAll() {
-        return productRepository.findAll();
+    public List<Product> listAll() throws IOException {
+
+        List<Product> allProducts = productRepository.findAll();
+        // Okay, das ist etwas komplexer als erwartet, es langt nicht nur das Json objekt mit liste
+        // von Objekten, ich brauche ja auch die merhwersteuer und google api, spaetestesn dann muss er jedes mal anfragen...
+        List<StorageObject> storageObjectList = storageService.getAllStorage();
+        for (Product product : allProducts) {
+            for (StorageObject storageObject : storageObjectList) {
+                if(product.getId().equals(storageObject.getId())){
+                    product.setPlace(storageObject.getPlace());
+                    product.setAmount(storageObject.getAmount());
+                    product.setDeliveryDate(LocalDateTime.now().plus(Duration.ofDays(storageObject.getDuration())));
+
+                }
+            }
+        }
+        return allProducts;
     }
 
     /**

@@ -4,6 +4,8 @@ import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
 import de.htwberlin.f4.applicationmicroservice.services.ProductService;
 
+import de.htwberlin.f4.applicationmicroservice.services.StorageService;
+import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +33,17 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
+    private final StorageService storageService;
 
     /**
      * Konstruktor mit Parameter
      * @param productService ProductService zum Aufrufen notwendiger Methoden auf dem DAO
+     * @param storageService
      */
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, StorageService storageService) {
         this.productService = productService;
+        this.storageService = storageService;
     }
 
     /**
@@ -74,6 +79,7 @@ public class ProductController {
         response.setHeader(headerKey, headerValue);
 
         List<Product> productList = productService.listAll();
+        List<StorageObject> storageObjectList = storageService.getAllStorage();
 
         ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
         String[] csvHeader = {"Product ID", "Name", "Description", "Size", "Color", "Price", "Weight", "Place", "Amount", "Mehrwertsteuer", "Formatted Address", "Delivery Date"};
