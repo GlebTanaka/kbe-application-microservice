@@ -20,6 +20,7 @@ import java.util.UUID;
 @Service
 public class StorageService {
 
+    // TODO Bekommt eine JSON file mit allen Storage Objekte, nur notwendig, wenn wir sie in listALl() nutezten wollen
     public List<StorageObject> getAllStorage() throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

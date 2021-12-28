@@ -59,19 +59,19 @@ public class ProductService {
     public List<Product> listAll() throws IOException {
 
         List<Product> allProducts = productRepository.findAll();
-        // Okay, das ist etwas komplexer als erwartet, es langt nicht nur das Json objekt mit liste
-        // von Objekten, ich brauche ja auch die merhwersteuer und google api, spaetestesn dann muss er jedes mal anfragen...
-        List<StorageObject> storageObjectList = storageService.getAllStorage();
-        for (Product product : allProducts) {
-            for (StorageObject storageObject : storageObjectList) {
-                if(product.getId().equals(storageObject.getId())){
-                    product.setPlace(storageObject.getPlace());
-                    product.setAmount(storageObject.getAmount());
-                    product.setDeliveryDate(LocalDateTime.now().plus(Duration.ofDays(storageObject.getDuration())));
 
-                }
-            }
-        }
+        // TODO hier eventuell alle attribute vom Produkt initialiseren mit der JSON aus storage microservie?
+//        List<StorageObject> storageObjectList = storageService.getAllStorage();
+//        for (Product product : allProducts) {
+//            for (StorageObject storageObject : storageObjectList) {
+//                if(product.getId().equals(storageObject.getId())){
+//                    product.setPlace(storageObject.getPlace());
+//                    product.setAmount(storageObject.getAmount());
+//                    product.setDeliveryDate(LocalDateTime.now().plus(Duration.ofDays(storageObject.getDuration())));
+//
+//                }
+//            }
+//        }
         return allProducts;
     }
 

@@ -70,8 +70,10 @@ public class ProductController {
      */
     @GetMapping("/export")
     public void exportProduktToCSV(HttpServletResponse response) throws IOException {
+
+        //TODO auslagern  in einen Service?
         response.setContentType("text/csv"); // text/csv;charset=ISO-8859-1
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = dateFormat.format(new Date());
 
         String headerKey = "Content-Disposition";
@@ -79,10 +81,9 @@ public class ProductController {
         response.setHeader(headerKey, headerValue);
 
         List<Product> productList = productService.listAll();
-        List<StorageObject> storageObjectList = storageService.getAllStorage();
 
         ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Product ID", "Name", "Description", "Size", "Color", "Price", "Weight", "Place", "Amount", "Mehrwertsteuer", "Formatted Address", "Delivery Date"};
+        String[] csvHeader = {"Id", "Name", "Description", "Size", "Color", "Price", "Weight", "Place", "Amount", "Mehrwertsteuer", "FormattedAddress", "DeliveryDate"};
         String[] nameMapping = {"id", "name", "description", "size", "color", "price", "weight", "place", "amount", "mehrwertsteuer", "formattedAddress", "deliveryDate"};
 
         csvBeanWriter.writeHeader(csvHeader);
