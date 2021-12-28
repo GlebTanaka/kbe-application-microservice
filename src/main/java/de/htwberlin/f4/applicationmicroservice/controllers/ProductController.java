@@ -2,6 +2,7 @@ package de.htwberlin.f4.applicationmicroservice.controllers;
 
 import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
+import de.htwberlin.f4.applicationmicroservice.services.CSVService;
 import de.htwberlin.f4.applicationmicroservice.services.ProductService;
 
 import de.htwberlin.f4.applicationmicroservice.services.StorageService;
@@ -33,7 +34,7 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
-    private final StorageService storageService;
+    private final CSVService csvService;
 
     /**
      * Konstruktor mit Parameter
@@ -41,9 +42,9 @@ public class ProductController {
      * @param storageService
      */
     @Autowired
-    public ProductController(ProductService productService, StorageService storageService) {
+    public ProductController(ProductService productService, CSVService csvService) {
         this.productService = productService;
-        this.storageService = storageService;
+        this.csvService = csvService;
     }
 
     /**
@@ -70,30 +71,6 @@ public class ProductController {
      */
     @GetMapping("/export")
     public void exportProduktToCSV(HttpServletResponse response) throws IOException {
-
-        //TODO auslagern  in einen Service?
-        response.setContentType("text/csv"); // text/csv;charset=ISO-8859-1
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTime = dateFormat.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment: filename=products_" + currentDateTime + ".csv";
-        response.setHeader(headerKey, headerValue);
-
-        List<Product> productList = productService.listAll();
-
-        ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Id", "Name", "Description", "Size", "Color", "Price", "Weight", "Place", "Amount", "Mehrwertsteuer", "FormattedAddress", "DeliveryDate"};
-        String[] nameMapping = {"id", "name", "description", "size", "color", "price", "weight", "place", "amount", "mehrwertsteuer", "formattedAddress", "deliveryDate"};
-
-        csvBeanWriter.writeHeader(csvHeader);
-
-        for (Product product : productList) {
-            //TODO hier werden alle transienten Attribute durch getProduct() aufgefuellt, geht das klueger?
-            UUID uuid = product.getId();
-            productService.getProduct(uuid);
-            csvBeanWriter.write(product, nameMapping);
-        }
-        csvBeanWriter.close();
+        csvService.exportProduct(response);
     }
 }

@@ -35,7 +35,8 @@ public class ProductService {
      * @param storageService
      */
     @Autowired
-    public ProductService(ProductRepository productRepository, CalculatorService calculatorService, GoogleMapsService googleMapsService, StorageService storageService) {
+    public ProductService(ProductRepository productRepository, CalculatorService calculatorService,
+            GoogleMapsService googleMapsService, StorageService storageService) {
         this.productRepository = productRepository;
         this.calculatorService = calculatorService;
         this.googleMapsService = googleMapsService;
@@ -51,28 +52,39 @@ public class ProductService {
         return productRepository.findAllSimpleProducts();
     }
 
-    //TODO eventuell unnoetig? wird nur intern vom exportProduktToCSV() genutzt
     /**
-     * Liefert alle Produkte mit allen Attributen aus der Datenbank
+     * Liefert alle Produkte mit allen Attributen auch den externen
+     * 
      * @return List<Product> Liste aller Produkte mit allen gespeicherten Attributen
      */
-    public List<Product> listAll() throws IOException {
-
+    public List<Product> listAll() {
         List<Product> allProducts = productRepository.findAll();
-
-        // TODO hier eventuell alle attribute vom Produkt initialiseren mit der JSON aus storage microservie?
-//        List<StorageObject> storageObjectList = storageService.getAllStorage();
-//        for (Product product : allProducts) {
-//            for (StorageObject storageObject : storageObjectList) {
-//                if(product.getId().equals(storageObject.getId())){
-//                    product.setPlace(storageObject.getPlace());
-//                    product.setAmount(storageObject.getAmount());
-//                    product.setDeliveryDate(LocalDateTime.now().plus(Duration.ofDays(storageObject.getDuration())));
-//
-//                }
-//            }
-//        }
+        allProducts.forEach(product -> fillProduct(product));
         return allProducts;
+    }
+
+    public void fillProduct(Product product) {
+        StorageObject storageObject;
+        try {
+            storageObject = storageService.getStorage(product.getId());
+            product.setMehrwertsteuer(
+                    calculatorService
+                            .getMehrwertsteuer(
+                                    product.getPrice()));
+
+            product.setPlace(storageObject.getPlace());
+            // Variables to calculate delivery date
+            Integer interval = storageObject.getDuration();
+            LocalDateTime start = LocalDateTime.now();
+            product.setDeliveryDate(start.plus(Duration.ofDays(interval)));
+
+            product.setAmount(storageObject.getAmount());
+            product.setFormattedAddress(
+                    googleMapsService
+                            .getGeocode(product.getPlace())
+                            .getResults().get(0)
+                            .getFormattedAddress());
+        } catch (IOException e) {}
     }
 
     /**
@@ -82,31 +94,9 @@ public class ProductService {
      * @return Product das erfagte Product
      * @throws NoSuchElementException wenn kein Produkt mit der id uebereinstimmt
      */
-    public Product getProduct(UUID uuid) throws NoSuchElementException, IOException {
+    public Product getProduct(UUID uuid) throws NoSuchElementException {
         Product product = productRepository.findById(uuid).orElseThrow();
-        product.setMehrwertsteuer(
-                calculatorService
-                        .getMehrwertsteuer(
-                                product.getPrice()));
-        //TODO Abhaengigkeit von Reihnfolge. setPlace() muss vor setFormattedAddress() kommen.
-        product.setPlace(
-                storageService
-                        .getStorage(uuid).getPlace());
-
-        product.setFormattedAddress(
-                googleMapsService
-                        .getGeocode(product.getPlace())
-                        .getResults().get(0)
-                        .getFormattedAddress());
-
-        // Variables to calculate delivery date
-        Integer interval = storageService.getStorage(uuid).getDuration();
-        LocalDateTime start = LocalDateTime.now();
-        product.setDeliveryDate(start.plus(Duration.ofDays(interval)));
-
-        product.setAmount(storageService.getStorage(uuid).getAmount());
-
+        fillProduct(product);
         return product;
     }
 }
-
