@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -60,7 +59,7 @@ public class ProductController {
      * Exportiert alle Produkte mit Attributen
      */
     @GetMapping("/export")
-    public void exportProduktToCSV(HttpServletResponse response) throws IOException {
-        csvService.exportProduct(response);
+    public void exportProduktToCSV() throws IOException {
+        csvService.exportProduct();
     }
 }

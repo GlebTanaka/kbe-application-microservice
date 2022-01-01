@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
@@ -21,7 +20,7 @@ public class CSVService {
     @Autowired
     private ProductService productService;
 
-    public void exportProduct(HttpServletResponse response) throws IOException{
+    public void exportProduct() throws IOException{
         /*response.setContentType("text/csv"); // text/csv;charset=ISO-8859-1
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = dateFormat.format(new Date());
