@@ -4,9 +4,6 @@ import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
 import de.htwberlin.f4.applicationmicroservice.services.CSVService;
 import de.htwberlin.f4.applicationmicroservice.services.ProductService;
-
-import de.htwberlin.f4.applicationmicroservice.services.StorageService;
-import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

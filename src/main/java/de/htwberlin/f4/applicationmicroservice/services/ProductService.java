@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -75,8 +75,9 @@ public class ProductService {
             product.setPlace(storageObject.getPlace());
             // Variables to calculate delivery date
             Integer interval = storageObject.getDuration();
-            LocalDateTime start = LocalDateTime.now();
-            product.setDeliveryDate(start.plus(Duration.ofDays(interval)));
+            product.setDeliveryTime(interval);
+            //LocalDate start = LocalDate.now().plusDays(interval);
+            product.setDeliveryDate(Date.valueOf(LocalDate.now().plusDays(interval)));
 
             product.setAmount(storageObject.getAmount());
             product.setFormattedAddress(

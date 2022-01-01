@@ -1,7 +1,6 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
 import okhttp3.OkHttpClient;
@@ -10,7 +9,6 @@ import okhttp3.ResponseBody;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

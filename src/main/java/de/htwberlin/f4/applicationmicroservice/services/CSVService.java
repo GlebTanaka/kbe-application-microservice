@@ -1,18 +1,18 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.Writer;
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import de.htwberlin.f4.applicationmicroservice.models.Product;
 
@@ -22,7 +22,7 @@ public class CSVService {
     private ProductService productService;
 
     public void exportProduct(HttpServletResponse response) throws IOException{
-        response.setContentType("text/csv"); // text/csv;charset=ISO-8859-1
+        /*response.setContentType("text/csv"); // text/csv;charset=ISO-8859-1
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = dateFormat.format(new Date());
 
@@ -41,6 +41,18 @@ public class CSVService {
         for (Product product : productList) {
             csvBeanWriter.write(product, nameMapping);
         }
-        csvBeanWriter.close();
+        csvBeanWriter.close();*/
+        List<Product> productList = productService.listAll();
+
+        Writer writer = new FileWriter("products.csv");
+        CSVWriter csvWriter = new CSVWriter(writer);
+        StatefulBeanToCsv<Product> beanToCsv = new StatefulBeanToCsvBuilder<Product>(writer).build();
+        try {
+            beanToCsv.write(productList);
+        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+            //e.printStackTrace();
+        }
+       
+        csvWriter.close();
     }
 }

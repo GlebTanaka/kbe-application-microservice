@@ -3,7 +3,8 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+
+import java.sql.Date;
 import java.util.UUID;
 
 /**
@@ -54,7 +55,10 @@ public class Product {
     @Transient
     private String formattedAddress; // Anstelle kann man auch lat und lng, oder andere Komponeten aus der Google API erfragen
     @Transient
-    private LocalDateTime deliveryDate;
+    private Date deliveryDate;
+    @Transient
+    private int deliveryTime;
+
 
     /**
      * Konstructor mit begrenzten Parametern.
