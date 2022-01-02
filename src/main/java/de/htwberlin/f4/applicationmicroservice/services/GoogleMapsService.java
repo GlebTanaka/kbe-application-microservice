@@ -30,7 +30,8 @@ public class GoogleMapsService {
         Request request = new Request.Builder()
                 .url("https://maps.googleapis.com/maps/api/geocode/json?address="
                         + encodedAddress
-                        + "&key=AIzaSyAEbByhCe98zVCUmkXDeGOOqMtyYutI6BY")
+                        // Manually extract api key for now, need to paste it in before running
+                        + "&key=")
                 .get()
                 .build();
         ResponseBody responseBody = client.newCall(request).execute().body();
