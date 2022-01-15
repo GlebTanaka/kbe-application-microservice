@@ -2,18 +2,15 @@ package de.htwberlin.f4.applicationmicroservice.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okhttp3.*;
 import okhttp3.FormBody.Builder;
 
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.http.HttpHeaders;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,6 +40,7 @@ public class StorageService {
 
     /**
      * Methode um bei der Storage API die restliche Information zu bekommen.
+     *
      * @param uuid UUID das erfragte Produkt
      * @return StorageObject Obejkt mit der Restinformation zum Product
      * @throws IOException wenn Response null ist
@@ -59,12 +57,17 @@ public class StorageService {
         return storageObject;
     }
 
-    public void postStorage(StorageObject storageObject) throws IOException {
+    public void postStorage(Product storageObject) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("id", storageObject.getId())
-            .add("amount", storageObject.getAmount().toString())
-            .add("place", storageObject.getPlace())
-            .add("duration", storageObject.getDuration().toString()).build();
+        String json = "{\"id\":" + "\"" + storageObject.getId().toString() + "\""
+                + ",\"amount\":" + storageObject.getAmount().toString()
+                + ",\"place\":" + "\"" + storageObject.getPlace() + "\""
+                + ",\"duration\":" + storageObject.getDeliveryTime().toString() + "}";
+
+        System.out.println(json);
+
+        RequestBody requestBody = RequestBody.create(
+                json, MediaType.parse("application/json"));
         Request request = new Request.Builder()
                 .url("http://localhost:8084/api/v1/storage/product/")
                 .post(requestBody)

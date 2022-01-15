@@ -66,11 +66,11 @@ public class ProductService {
     public void fillProduct(Product product) {
         StorageObject storageObject;
         try {
-            storageObject = storageService.getStorage(product.getId());
             product.setMehrwertsteuer(
                     calculatorService
                             .getMehrwertsteuer(
                                     product.getPrice()));
+            storageObject = storageService.getStorage(product.getId());
 
             product.setPlace(storageObject.getPlace());
             // Variables to calculate delivery date

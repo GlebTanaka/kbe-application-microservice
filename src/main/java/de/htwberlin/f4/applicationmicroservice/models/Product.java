@@ -57,7 +57,7 @@ public class Product {
     @Transient
     private Date deliveryDate;
     @Transient
-    private int deliveryTime;
+    private Integer deliveryTime;
 
 
     /**
@@ -69,13 +69,16 @@ public class Product {
      * @param price Double Netto Betrag des Produktes
      * @param weight Double Gewicht des Produktes
      */
-    public Product(String name, String description, String size, String color, Double price, Double weight) {
+    public Product(String name, String description, String size, String color, Double price, Double weight, Integer amount, Integer duration, String place) {
         this.name = name;
         this.description = description;
         this.size = size;
         this.color = color;
         this.price = price;
         this.weight = weight;
+        this.amount = amount;
+        this.deliveryTime = duration;
+        this.place = place;
     }
 
 }
