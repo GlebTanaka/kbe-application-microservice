@@ -1,4 +1,4 @@
-package de.htwberlin.f4.applicationmicroservice.services.storage;
+package de.htwberlin.f4.applicationmicroservice.models.storage;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

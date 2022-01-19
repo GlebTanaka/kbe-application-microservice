@@ -1,7 +1,7 @@
 package de.htwberlin.f4.applicationmicroservice.dao;
 
-import de.htwberlin.f4.applicationmicroservice.models.Product;
-import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
+import de.htwberlin.f4.applicationmicroservice.models.product.Product;
+import de.htwberlin.f4.applicationmicroservice.models.product.SimpleProduct;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

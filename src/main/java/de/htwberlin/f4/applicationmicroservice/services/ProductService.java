@@ -1,10 +1,10 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
 import de.htwberlin.f4.applicationmicroservice.dao.ProductRepository;
-import de.htwberlin.f4.applicationmicroservice.models.Product;
-import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
+import de.htwberlin.f4.applicationmicroservice.models.product.Product;
+import de.htwberlin.f4.applicationmicroservice.models.product.SimpleProduct;
 
-import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
+import de.htwberlin.f4.applicationmicroservice.models.storage.StorageObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +49,8 @@ public class ProductService {
         addMehrwertsteuerToProduct(product);
         addStorageObjectToProduct(product);
         addFormattedAddress(product);
+        addLatidute(product);
+        addLongitude(product);
     }
 
     private void addFormattedAddress(Product product) {
@@ -59,6 +61,32 @@ public class ProductService {
                         .getResults().get(0)
                         .getFormattedAddress());
         } catch (IOException e) {}
+    }
+
+    private void addLatidute(Product product) {
+        try {
+            product.setLat(googleMapsService.getGeocode(product.getPlace())
+                    .getResults().get(0)
+                    .getGeometry()
+                    .getGeocodeLocation()
+                    .getLatitude()
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addLongitude(Product product) {
+        try {
+            product.setLng(googleMapsService.getGeocode(product.getPlace())
+                    .getResults().get(0)
+                    .getGeometry()
+                    .getGeocodeLocation()
+                    .getLongitude()
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addMehrwertsteuerToProduct(Product product){

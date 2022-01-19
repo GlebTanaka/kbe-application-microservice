@@ -1,6 +1,6 @@
 package de.htwberlin.f4.applicationmicroservice.configuration;
 
-import de.htwberlin.f4.applicationmicroservice.models.Product;
+import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 import de.htwberlin.f4.applicationmicroservice.dao.ProductRepository;
 import de.htwberlin.f4.applicationmicroservice.services.StorageService;
 import org.springframework.boot.CommandLineRunner;

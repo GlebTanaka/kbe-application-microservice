@@ -1,4 +1,4 @@
-package de.htwberlin.f4.applicationmicroservice.models;
+package de.htwberlin.f4.applicationmicroservice.models.product;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -51,6 +51,10 @@ public class Product {
     private Double mehrwertsteuer;
     @Transient
     private String formattedAddress; // Anstelle kann man auch lat und lng, oder andere Komponeten aus der Google API erfragen
+    @Transient
+    private String lat;
+    @Transient
+    private String lng;
     @Transient
     private Date deliveryDate;
     @Transient

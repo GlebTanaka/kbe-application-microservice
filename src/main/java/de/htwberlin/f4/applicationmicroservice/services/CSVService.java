@@ -13,7 +13,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.htwberlin.f4.applicationmicroservice.models.Product;
+import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 
 @Service
 public class CSVService {

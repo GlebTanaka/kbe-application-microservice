@@ -1,4 +1,4 @@
-package de.htwberlin.f4.applicationmicroservice.models;
+package de.htwberlin.f4.applicationmicroservice.models.product;
 
 import java.util.UUID;
 

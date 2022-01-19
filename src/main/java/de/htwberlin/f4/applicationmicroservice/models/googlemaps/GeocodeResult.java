@@ -1,4 +1,4 @@
-package de.htwberlin.f4.applicationmicroservice.services.googlemaps;
+package de.htwberlin.f4.applicationmicroservice.models.googlemaps;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

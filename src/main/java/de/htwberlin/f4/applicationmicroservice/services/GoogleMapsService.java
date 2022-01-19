@@ -1,7 +1,7 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.htwberlin.f4.applicationmicroservice.services.googlemaps.GeocodeResult;
+import de.htwberlin.f4.applicationmicroservice.models.googlemaps.GeocodeResult;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;

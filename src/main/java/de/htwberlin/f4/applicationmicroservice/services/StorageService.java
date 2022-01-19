@@ -2,8 +2,8 @@ package de.htwberlin.f4.applicationmicroservice.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.htwberlin.f4.applicationmicroservice.models.Product;
-import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
+import de.htwberlin.f4.applicationmicroservice.models.product.Product;
+import de.htwberlin.f4.applicationmicroservice.models.storage.StorageObject;
 import okhttp3.*;
 
 import org.springframework.stereotype.Service;

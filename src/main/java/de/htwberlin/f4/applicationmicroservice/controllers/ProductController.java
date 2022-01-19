@@ -1,7 +1,7 @@
 package de.htwberlin.f4.applicationmicroservice.controllers;
 
-import de.htwberlin.f4.applicationmicroservice.models.Product;
-import de.htwberlin.f4.applicationmicroservice.models.SimpleProduct;
+import de.htwberlin.f4.applicationmicroservice.models.product.Product;
+import de.htwberlin.f4.applicationmicroservice.models.product.SimpleProduct;
 import de.htwberlin.f4.applicationmicroservice.services.CSVService;
 import de.htwberlin.f4.applicationmicroservice.services.ProductService;
 import org.jetbrains.annotations.NotNull;
