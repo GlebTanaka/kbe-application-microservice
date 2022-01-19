@@ -26,14 +26,6 @@ public class ProductService {
     private final GoogleMapsService googleMapsService;
     private final StorageService storageService;
 
-    /**
-     * Konstruktor mit Parameter
-     *
-     * @param productRepository ProductRepository das DAO
-     * @param calculatorService
-     * @param googleMapsService
-     * @param storageService
-     */
     @Autowired
     public ProductService(ProductRepository productRepository, CalculatorService calculatorService,
             GoogleMapsService googleMapsService, StorageService storageService) {
@@ -43,56 +35,58 @@ public class ProductService {
         this.storageService = storageService;
     }
 
-    /**
-     * Methode um alles Produkte vom DAO zu erfragen
-     *
-     * @return List<Product> Liste aller Produkte
-     */
-    public List<SimpleProduct> getProducts() {
+    public List<SimpleProduct> getSimpleProducts() {
         return productRepository.findAllSimpleProducts();
     }
 
-    /**
-     * Liefert alle Produkte mit allen Attributen auch den externen
-     * 
-     * @return List<Product> Liste aller Produkte mit allen gespeicherten Attributen
-     */
-    public List<Product> listAll() {
+    public List<Product> getProducts() {
         List<Product> allProducts = productRepository.findAll();
         allProducts.forEach(product -> fillProduct(product));
         return allProducts;
     }
 
     public void fillProduct(Product product) {
-        StorageObject storageObject;
+        addMehrwertsteuerToProduct(product);
+        addStorageObjectToProduct(product);
+        addFormattedAddress(product);
+    }
+
+    private void addFormattedAddress(Product product) {
         try {
-            product.setMehrwertsteuer(
-                    calculatorService
-                            .getMehrwertsteuer(
-                                    product.getPrice()));
-            storageObject = storageService.getStorage(product.getId());
-
-            product.setPlace(storageObject.getPlace());
-            // Variables to calculate delivery date
-            Integer interval = storageObject.getDuration();
-            product.setDeliveryTime(interval);
-            //LocalDate start = LocalDate.now().plusDays(interval);
-            product.setDeliveryDate(Date.valueOf(LocalDate.now().plusDays(interval)));
-
-            product.setAmount(storageObject.getAmount());
             product.setFormattedAddress(
-                    googleMapsService
-                            .getGeocode(product.getPlace())
-                            .getResults().get(0)
-                            .getFormattedAddress());
+                googleMapsService
+                        .getGeocode(product.getPlace())
+                        .getResults().get(0)
+                        .getFormattedAddress());
         } catch (IOException e) {}
     }
 
+    private void addMehrwertsteuerToProduct(Product product){
+        product.setMehrwertsteuer(calculatorService.getMehrwertsteuer(product.getPrice()));
+    }
+
+    private void addStorageObjectToProduct(Product product){
+        StorageObject storageObject = getStorageObject(product);
+        if(storageObject!=null){
+            addStorageParametersToProduct(storageObject, product);
+        }
+    }
+
+    private void addStorageParametersToProduct(StorageObject storageObject, Product product){
+        product.setPlace(storageObject.getPlace());
+        product.setDeliveryTime(storageObject.getDuration());
+        product.setDeliveryDate(Date.valueOf(LocalDate.now().plusDays(storageObject.getDuration())));
+        product.setAmount(storageObject.getAmount());
+    }
+
+    private StorageObject getStorageObject(Product product){
+        try{
+            return storageService.getStorage(product.getId());
+        }catch (IOException e) {}
+        return null;
+    }
+
     /**
-     * Methode um ein spezifischen Produkt vom DAO zu erfragen
-     *
-     * @param uuid UUID Suchparameter
-     * @return Product das erfagte Product
      * @throws NoSuchElementException wenn kein Produkt mit der id uebereinstimmt
      */
     public Product getProduct(UUID uuid) throws NoSuchElementException {

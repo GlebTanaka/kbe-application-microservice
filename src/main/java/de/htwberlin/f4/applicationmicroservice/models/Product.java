@@ -7,9 +7,6 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.UUID;
 
-/**
- * Model der Entitaet Product
- */
 @Data
 @Builder
 @NoArgsConstructor
@@ -59,16 +56,6 @@ public class Product {
     @Transient
     private Integer deliveryTime;
 
-
-    /**
-     * Konstructor mit begrenzten Parametern.
-     * @param name String Name des Produktes
-     * @param description String Beschreibung des Produktes
-     * @param size String Groeße des Produktes
-     * @param color String Farbe des Produktes
-     * @param price Double Netto Betrag des Produktes
-     * @param weight Double Gewicht des Produktes
-     */
     public Product(String name, String description, String size, String color, Double price, Double weight, Integer amount, Integer duration, String place) {
         this.name = name;
         this.description = description;
@@ -80,6 +67,5 @@ public class Product {
         this.deliveryTime = duration;
         this.place = place;
     }
-
 }
 

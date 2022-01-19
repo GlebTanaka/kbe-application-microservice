@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htwberlin.f4.applicationmicroservice.models.Product;
 import de.htwberlin.f4.applicationmicroservice.services.storage.StorageObject;
 import okhttp3.*;
-import okhttp3.FormBody.Builder;
 
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.http.HttpHeaders;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,13 +36,6 @@ public class StorageService {
         return storageObjectList;
     }
 
-    /**
-     * Methode um bei der Storage API die restliche Information zu bekommen.
-     *
-     * @param uuid UUID das erfragte Produkt
-     * @return StorageObject Obejkt mit der Restinformation zum Product
-     * @throws IOException wenn Response null ist
-     */
     public StorageObject getStorage(UUID uuid) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

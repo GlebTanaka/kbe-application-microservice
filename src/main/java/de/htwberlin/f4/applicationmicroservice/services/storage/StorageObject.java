@@ -17,7 +17,6 @@ public class StorageObject {
     private String Id;
     @JsonProperty("amount")
     private Integer amount;
-    //TODO change Integer to Period or Duration?
     @JsonProperty("duration")
     private Integer duration;
     @JsonProperty("place")

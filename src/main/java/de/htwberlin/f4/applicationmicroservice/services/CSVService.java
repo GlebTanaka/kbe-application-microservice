@@ -21,37 +21,26 @@ public class CSVService {
     private ProductService productService;
 
     public void exportProduct() throws IOException{
-        /*response.setContentType("text/csv"); // text/csv;charset=ISO-8859-1
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTime = dateFormat.format(new Date());
+        List<Product> products = productService.getProducts();
+        handleFileWriter(products);
+    }
 
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment: filename=products_" + currentDateTime + ".csv";
-        response.setHeader(headerKey, headerValue);
-
-        List<Product> productList = productService.listAll();
-
-        ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Id", "Name", "Description", "Size", "Color", "Price", "Weight", "Place", "Amount", "Mehrwertsteuer", "FormattedAddress", "DeliveryDate"};
-        String[] nameMapping = {"id", "name", "description", "size", "color", "price", "weight", "place", "amount", "mehrwertsteuer", "formattedAddress", "deliveryDate"};
-
-        csvBeanWriter.writeHeader(csvHeader);
-
-        for (Product product : productList) {
-            csvBeanWriter.write(product, nameMapping);
-        }
-        csvBeanWriter.close();*/
-        List<Product> productList = productService.listAll();
-
+    private void handleFileWriter(List<Product> products) throws IOException{
         Writer writer = new FileWriter("products.csv");
+        handleCSVWriter(products, writer);
+        writer.close();
+    }
+
+    private void handleCSVWriter(List<Product> products, Writer writer) throws IOException{
         CSVWriter csvWriter = new CSVWriter(writer);
+        writeInCSV(products, writer);
+        csvWriter.close();
+    }
+
+    private void writeInCSV(List<Product> products, Writer writer){
         StatefulBeanToCsv<Product> beanToCsv = new StatefulBeanToCsvBuilder<Product>(writer).build();
         try {
-            beanToCsv.write(productList);
-        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
-            //e.printStackTrace();
-        }
-       
-        csvWriter.close();
+            beanToCsv.write(products);
+        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {}
     }
 }
