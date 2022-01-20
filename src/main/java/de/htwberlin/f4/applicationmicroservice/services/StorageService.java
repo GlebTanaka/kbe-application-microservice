@@ -6,10 +6,12 @@ import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 import de.htwberlin.f4.applicationmicroservice.models.storage.StorageObject;
 import okhttp3.*;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -44,19 +46,13 @@ public class StorageService {
                 .build();
         ResponseBody responseBody = client.newCall(request).execute().body();
         ObjectMapper objectMapper = new ObjectMapper();
-        StorageObject storageObject = objectMapper.readValue(responseBody.string(), StorageObject.class);
-        return storageObject;
+        return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), StorageObject.class);
     }
 
-    public void postStorage(Product storageObject) throws IOException {
+    public void postStorage(Product product) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        String json = "{\"id\":" + "\"" + storageObject.getId().toString() + "\""
-                + ",\"amount\":" + storageObject.getAmount().toString()
-                + ",\"place\":" + "\"" + storageObject.getPlace() + "\""
-                + ",\"duration\":" + storageObject.getDeliveryTime().toString() + "}";
-
+        String json = storageWrapper(product);
         System.out.println(json);
-
         RequestBody requestBody = RequestBody.create(
                 json, MediaType.parse("application/json"));
         Request request = new Request.Builder()
@@ -64,5 +60,13 @@ public class StorageService {
                 .post(requestBody)
                 .build();
         Response response = client.newCall(request).execute();
+    }
+
+    @NotNull
+    private String storageWrapper(Product storageObject) {
+        return "{\"id\":" + "\"" + storageObject.getId().toString() + "\""
+                + ",\"amount\":" + storageObject.getAmount().toString()
+                + ",\"place\":" + "\"" + storageObject.getPlace() + "\""
+                + ",\"duration\":" + storageObject.getDeliveryTime().toString() + "}";
     }
 }
