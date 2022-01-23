@@ -1,4 +1,5 @@
 package de.htwberlin.f4.applicationmicroservice.models.product;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -44,18 +45,25 @@ public class Product {
     @Column(name = "weight", nullable = false)
     private Double weight;
     @Transient
+    @Schema( description = "amount is stored externally")
     private Integer amount;
     @Transient
+    @Schema(description = "amount is stored externally")
     private String place;
     @Transient
+    @Schema(description = "mehrwersteuer is requested from calculator-microservice")
     private Double mehrwertsteuer;
     @Transient
-    private String formattedAddress; // Anstelle kann man auch lat und lng, oder andere Komponeten aus der Google API erfragen
+    @Schema(description = "Address is requested from google-map-api")
+    private String formattedAddress;
     @Transient
+    @Schema(description = "latitude is requested from google-map-api")
     private String lat;
     @Transient
+    @Schema(description = "longitude is requested from google-map-api")
     private String lng;
     @Transient
+    @Schema(description = "delivery date is stored externally")
     private Date deliveryDate;
     @Transient
     private Integer deliveryTime;
