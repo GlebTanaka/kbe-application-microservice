@@ -1,6 +1,10 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
 import de.htwberlin.f4.applicationmicroservice.dao.ProductRepository;
+import de.htwberlin.f4.applicationmicroservice.models.googlemaps.GeocodeGeometry;
+import de.htwberlin.f4.applicationmicroservice.models.googlemaps.GeocodeLocation;
+import de.htwberlin.f4.applicationmicroservice.models.googlemaps.GeocodeObject;
+import de.htwberlin.f4.applicationmicroservice.models.googlemaps.GeocodeResult;
 import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 import de.htwberlin.f4.applicationmicroservice.models.product.SimpleProduct;
 
@@ -48,59 +52,83 @@ public class ProductService {
     public void fillProduct(Product product) {
         addMehrwertsteuerToProduct(product);
         addStorageObjectToProduct(product);
-        addFormattedAddress(product);
-        addLatidute(product);
-        addLongitude(product);
+        addGeocodeResultToProduct(product);
     }
 
-    private void addFormattedAddress(Product product) {
-        try {
-            product.setFormattedAddress(
-                googleMapsService
-                        .getGeocode(product.getPlace())
-                        .getResults().get(0)
-                        .getFormattedAddress());
-        } catch (IOException e) {}
-    }
-
-    private void addLatidute(Product product) {
-        try {
-            product.setLat(googleMapsService.getGeocode(product.getPlace())
-                    .getResults().get(0)
-                    .getGeometry()
-                    .getGeocodeLocation()
-                    .getLatitude()
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void addGeocodeResultToProduct(Product product){
+        GeocodeResult geocodeResult = getGeocodeResult(product);
+        if(geocodeResult!=null){
+            addGeocodeResultToProduct(geocodeResult, product);
         }
     }
 
-    private void addLongitude(Product product) {
+    private void addGeocodeResultToProduct(GeocodeResult geocodeResult, Product product){
+        addFormattedAddress(geocodeResult, product);
+        addLatidute(geocodeResult, product);
+        addLongitude(geocodeResult, product);
+    }
+
+    private void addFormattedAddress(GeocodeResult geocodeResult, Product product) {
+        product.setFormattedAddress(getFormattedAdress(geocodeResult, product));
+    }
+
+    private void addLatidute(GeocodeResult geocodeResult, Product product) {
+        product.setLat(getLatitude(geocodeResult, product));
+    }
+
+    private void addLongitude(GeocodeResult geocodeResult, Product product) {
+        product.setLng(getLongitude(geocodeResult, product));
+    }
+
+    private GeocodeResult getGeocodeResult(Product product){
         try {
-            product.setLng(googleMapsService.getGeocode(product.getPlace())
-                    .getResults().get(0)
-                    .getGeometry()
-                    .getGeocodeLocation()
-                    .getLongitude()
-            );
+            return googleMapsService.getGeocode(product.getPlace());
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
+    }
+
+    private GeocodeObject getGeocodeObject(GeocodeResult geocodeResult, Product product){
+        return geocodeResult
+                    .getResults().get(0);
+    }
+
+    private GeocodeGeometry getGeocodeGeometry(GeocodeResult geocodeResult, Product product){
+        return getGeocodeObject(geocodeResult, product).getGeometry();
+    }
+
+    private GeocodeLocation getGeocodeLocation(GeocodeResult geocodeResult, Product product){
+        return getGeocodeGeometry(geocodeResult, product).getGeocodeLocation();
+    }
+
+    private String getLongitude(GeocodeResult geocodeResult, Product product){
+        return getGeocodeLocation(geocodeResult, product).getLongitude();
+    }
+
+    private String getLatitude(GeocodeResult geocodeResult, Product product){
+        return getGeocodeLocation(geocodeResult, product).getLatitude();
+    }
+
+    private String getFormattedAdress(GeocodeResult geocodeResult, Product product){
+        return getGeocodeObject(geocodeResult, product).getFormattedAddress();
+    }
+
+    private Double getMehrwertSteuer(Product product){
+        return calculatorService.getMehrwertsteuer(product.getPrice());
     }
 
     private void addMehrwertsteuerToProduct(Product product){
-        product.setMehrwertsteuer(calculatorService.getMehrwertsteuer(product.getPrice()));
+        product.setMehrwertsteuer(getMehrwertSteuer(product));
     }
 
     private void addStorageObjectToProduct(Product product){
         StorageObject storageObject = getStorageObject(product);
         if(storageObject!=null){
-            addStorageParametersToProduct(storageObject, product);
+            addStorageObjectToProduct(storageObject, product);
         }
     }
 
-    private void addStorageParametersToProduct(StorageObject storageObject, Product product){
+    private void addStorageObjectToProduct(StorageObject storageObject, Product product){
         product.setPlace(storageObject.getPlace());
         product.setDeliveryTime(storageObject.getDuration());
         product.setDeliveryDate(Date.valueOf(LocalDate.now().plusDays(storageObject.getDuration())));
