@@ -1,16 +1,17 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 import de.htwberlin.f4.applicationmicroservice.models.storage.StorageObject;
 import okhttp3.*;
+import okhttp3.Request.Builder;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -20,46 +21,57 @@ import java.util.UUID;
 @Service
 public class StorageService {
 
-    // TODO Bekommt eine JSON file mit allen Storage Objekte, nur notwendig, wenn wir sie in listALl() nutezten wollen
-    public List<StorageObject> getAllStorage() throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("http://localhost:8084/api/v1/storage")
-                .get()
-                .build();
-        ResponseBody responseBody = client.newCall(request).execute().body();
-        System.out.println(responseBody.toString());
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<StorageObject> storageObjectList = objectMapper.readValue(responseBody.string(), new TypeReference<>() {
-        });
-        for (StorageObject storageObject : storageObjectList) {
-            System.out.println(storageObject.toString());
-        }
-        return storageObjectList;
-    }
+    private final String storageApi = "http://localhost:8084/api/v1/storage/product/";
 
     public StorageObject getStorage(UUID uuid) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("http://localhost:8084/api/v1/storage/product/" + uuid.toString())
-                .get()
-                .build();
-        ResponseBody responseBody = client.newCall(request).execute().body();
+        Request request = getGetRequest(storageApi + uuid.toString());
+        ResponseBody responseBody = getResponse(request).body();
+        return getStorageObject(responseBody);
+    }
+
+    public void postStorage(Product product) throws IOException {
+        String json = storageWrapper(product);
+        RequestBody requestBody = getJsonRequestBody(json);
+        Request request = getPostRequest(storageApi, requestBody);
+        Response response = getResponse(request);
+    }
+
+    private StorageObject getStorageObject(ResponseBody responseBody) throws IOException{
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), StorageObject.class);
     }
 
-    public void postStorage(Product product) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        String json = storageWrapper(product);
-        System.out.println(json);
-        RequestBody requestBody = RequestBody.create(
-                json, MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url("http://localhost:8084/api/v1/storage/product/")
-                .post(requestBody)
-                .build();
-        Response response = client.newCall(request).execute();
+    private Response getResponse(Request request) throws IOException{
+        OkHttpClient client = getClient();
+        return client.newCall(request).execute();
+    }
+
+    private RequestBody getJsonRequestBody(String json){
+        return RequestBody.create(json, MediaType.parse("application/json"));
+    }
+
+    private Builder getRequestBuilder(String uri){
+        return new Request.Builder().url(uri);
+    }
+
+    private Request getPostRequest(String uri, RequestBody requestBody){
+        Builder builder = getRequestBuilder(uri);
+        builder = builder.post(requestBody);
+        return buildRequest(builder);
+    }
+
+    private Request getGetRequest(String uri){
+        Builder builder = getRequestBuilder(uri);
+        builder = builder.get();
+        return buildRequest(builder);
+    }
+
+    private Request buildRequest(Builder builder){
+        return builder.build();
+    }
+
+    private OkHttpClient getClient(){
+        return new OkHttpClient();
     }
 
     @NotNull
