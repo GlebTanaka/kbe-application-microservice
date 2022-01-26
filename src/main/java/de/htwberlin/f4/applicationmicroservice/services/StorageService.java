@@ -1,13 +1,10 @@
 package de.htwberlin.f4.applicationmicroservice.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 import de.htwberlin.f4.applicationmicroservice.models.storage.StorageObject;
 import okhttp3.*;
 import okhttp3.Request.Builder;
-
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +26,15 @@ public class StorageService {
         return getStorageObject(responseBody);
     }
 
-    public void postStorage(Product product) throws IOException {
+    public void postStorage(Product product) {
         String json = storageWrapper(product);
         RequestBody requestBody = getJsonRequestBody(json);
         Request request = getPostRequest(storageApi, requestBody);
-        Response response = getResponse(request);
+        try {
+            Response response = getResponse(request);
+        } catch (IOException e) {
+            System.err.println("Storage Repository is not running, Connection failed");
+        }
     }
 
     private StorageObject getStorageObject(ResponseBody responseBody) throws IOException{

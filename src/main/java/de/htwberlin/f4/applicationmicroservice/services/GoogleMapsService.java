@@ -28,18 +28,24 @@ public class GoogleMapsService {
      * @throws IOException wenn es keine Resoponse gibt
      */
     public GeocodeResult getGeocode(String address) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
-        String apyKey = getApyKey();
-        Request request = new Request.Builder()
-                .url("https://maps.googleapis.com/maps/api/geocode/json?address="
-                        + encodedAddress
-                        + "&key=" + apyKey)
-                .get()
-                .build();
-        ResponseBody responseBody = client.newCall(request).execute().body();
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), GeocodeResult.class);
+        if (address == null) {
+            System.err.println("Connection to Storage Service failed");
+            return null;
+        } else {
+            OkHttpClient client = new OkHttpClient();
+            String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
+            String apyKey = getApyKey();
+            Request request = new Request.Builder()
+                    .url("https://maps.googleapis.com/maps/api/geocode/json?address="
+                            + encodedAddress
+                            + "&key=" + apyKey)
+                    .get()
+                    .build();
+            ResponseBody responseBody = client.newCall(request).execute().body();
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), GeocodeResult.class);
+
+        }
     }
 
     @Nullable
