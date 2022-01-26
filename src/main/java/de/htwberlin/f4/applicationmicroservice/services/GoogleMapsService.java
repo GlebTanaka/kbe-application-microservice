@@ -2,8 +2,8 @@ package de.htwberlin.f4.applicationmicroservice.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htwberlin.f4.applicationmicroservice.models.googlemaps.GeocodeResult;
+import de.htwberlin.f4.applicationmicroservice.util.RequestUtil;
 import io.github.cdimascio.dotenv.Dotenv;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +20,7 @@ import java.util.Objects;
 @Service
 public class GoogleMapsService {
 
+    private final String googleApi = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     /**
      * Liefert ein GeocodeResult Object im JSON-Format
      *
@@ -31,21 +32,21 @@ public class GoogleMapsService {
         if (address == null) {
             System.err.println("Connection to Storage Service failed");
             return null;
-        } else {
-            OkHttpClient client = new OkHttpClient();
-            String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
-            String apyKey = getApyKey();
-            Request request = new Request.Builder()
-                    .url("https://maps.googleapis.com/maps/api/geocode/json?address="
-                            + encodedAddress
-                            + "&key=" + apyKey)
-                    .get()
-                    .build();
-            ResponseBody responseBody = client.newCall(request).execute().body();
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), GeocodeResult.class);
+        } 
+        Request request = RequestUtil.getGetRequest(getGoogleUri(address));
+        ResponseBody responseBody = RequestUtil.getResponse(request).body();
+        return getGeocodeResult(responseBody);
+    }
 
-        }
+    private String getGoogleUri(String address){
+        String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
+        String apyKey = getApyKey();
+        return googleApi + encodedAddress + "&key=" + apyKey;
+    }
+
+    private GeocodeResult getGeocodeResult(ResponseBody responseBody) throws IOException{
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), GeocodeResult.class);
     }
 
     @Nullable
