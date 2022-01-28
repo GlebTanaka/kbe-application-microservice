@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Enables Access to Calculator API
+ */
 @Service
 public class CalculatorService {
     public Double getMehrwertsteuer(double price) {

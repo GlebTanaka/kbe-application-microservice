@@ -10,15 +10,15 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- * Konfigurationsklasse um Produkte zu generieren
+ * This class is responsible to generate Product objects
  */
 @Configuration
 public class ProductConfig {
 
     /**
-     * Methode, die 10 Produkte erzeugt und sie speichert.
+     * Function to generate 10 Product objects, each having 9 different attributes
      *
-     * @param productRepository ProductRepository das DAO
+     * @param productRepository data access object
      * @return void
      */
     @Bean
@@ -156,9 +156,9 @@ public class ProductConfig {
                     product09,
                     product10
             );
-
+            // save objects local storage
             productRepository.saveAll(productList);
-
+            // export various attributes to external storage
             for (Product product : productList) {
                 storageService.postStorage(product);
             }

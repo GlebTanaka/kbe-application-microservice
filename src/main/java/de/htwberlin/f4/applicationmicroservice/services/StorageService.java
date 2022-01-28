@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Klasse um ein den Rest der Attrubte der Producte zu erfragen.
+ * Enable access to Product information in external storage
  */
 @Service
 public class StorageService {
@@ -37,12 +37,14 @@ public class StorageService {
         }
     }
 
-    private StorageObject getStorageObject(ResponseBody responseBody) throws IOException{
+    /* ================ helper methods =============================================== */
+
+    private StorageObject getStorageObject(ResponseBody responseBody) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), StorageObject.class);
     }
 
-    private RequestBody getJsonRequestBody(String json){
+    private RequestBody getJsonRequestBody(String json) {
         return RequestBody.create(json, MediaType.parse("application/json"));
     }
 

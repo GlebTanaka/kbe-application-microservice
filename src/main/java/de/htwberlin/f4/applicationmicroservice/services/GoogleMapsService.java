@@ -15,18 +15,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
- * Zugriff auf Addressinformation
+ * Accessing address information from GoogleMaps
  */
 @Service
 public class GoogleMapsService {
 
     private final String googleApi = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+
     /**
-     * Liefert ein GeocodeResult Object im JSON-Format
-     *
-     * @param address String, Ort des Productes
-     * @return GeocodeResult Ergebnis der Anfrage
-     * @throws IOException wenn es keine Resoponse gibt
+     * Method to get a GeocodeResult Object in JSON format
      */
     public GeocodeResult getGeocode(String address) throws IOException {
         if (address == null) {

@@ -15,8 +15,12 @@ import org.springframework.stereotype.Service;
 
 import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 
+/**
+ * Class to write Product Information into a CSV-file
+ */
 @Service
 public class CSVService {
+
     @Autowired
     private ProductService productService;
 

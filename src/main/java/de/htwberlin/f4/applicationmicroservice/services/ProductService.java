@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 /**
- * Service fuer Zugriff auf DAO
+ * Enable assess to information about Product object
  */
 @Service
 public class ProductService {
@@ -32,7 +32,7 @@ public class ProductService {
 
     @Autowired
     public ProductService(ProductRepository productRepository, CalculatorService calculatorService,
-            GoogleMapsService googleMapsService, StorageService storageService) {
+                          GoogleMapsService googleMapsService, StorageService storageService) {
         this.productRepository = productRepository;
         this.calculatorService = calculatorService;
         this.googleMapsService = googleMapsService;
@@ -45,7 +45,7 @@ public class ProductService {
 
     public List<Product> getProducts() {
         List<Product> allProducts = productRepository.findAll();
-        allProducts.forEach(product -> fillProduct(product));
+        allProducts.forEach(this::fillProduct);
         return allProducts;
     }
 
@@ -55,14 +55,16 @@ public class ProductService {
         addGeocodeResultToProduct(product);
     }
 
-    private void addGeocodeResultToProduct(Product product){
+    /* =============================== helper functions ======================================= */
+
+    private void addGeocodeResultToProduct(Product product) {
         GeocodeResult geocodeResult = getGeocodeResult(product);
-        if(geocodeResult!=null){
+        if (geocodeResult != null) {
             addGeocodeResultToProduct(geocodeResult, product);
         }
     }
 
-    private void addGeocodeResultToProduct(GeocodeResult geocodeResult, Product product){
+    private void addGeocodeResultToProduct(GeocodeResult geocodeResult, Product product) {
         addFormattedAddress(geocodeResult, product);
         addLatidute(geocodeResult, product);
         addLongitude(geocodeResult, product);
@@ -80,7 +82,7 @@ public class ProductService {
         product.setLng(getLongitude(geocodeResult, product));
     }
 
-    private GeocodeResult getGeocodeResult(Product product){
+    private GeocodeResult getGeocodeResult(Product product) {
         try {
             return googleMapsService.getGeocode(product.getPlace());
         } catch (IOException e) {
@@ -88,63 +90,61 @@ public class ProductService {
         }
     }
 
-    private GeocodeObject getGeocodeObject(GeocodeResult geocodeResult, Product product){
+    private GeocodeObject getGeocodeObject(GeocodeResult geocodeResult, Product product) {
         return geocodeResult
-                    .getResults().get(0);
+                .getResults().get(0);
     }
 
-    private GeocodeGeometry getGeocodeGeometry(GeocodeResult geocodeResult, Product product){
+    private GeocodeGeometry getGeocodeGeometry(GeocodeResult geocodeResult, Product product) {
         return getGeocodeObject(geocodeResult, product).getGeometry();
     }
 
-    private GeocodeLocation getGeocodeLocation(GeocodeResult geocodeResult, Product product){
+    private GeocodeLocation getGeocodeLocation(GeocodeResult geocodeResult, Product product) {
         return getGeocodeGeometry(geocodeResult, product).getGeocodeLocation();
     }
 
-    private String getLongitude(GeocodeResult geocodeResult, Product product){
+    private String getLongitude(GeocodeResult geocodeResult, Product product) {
         return getGeocodeLocation(geocodeResult, product).getLongitude();
     }
 
-    private String getLatitude(GeocodeResult geocodeResult, Product product){
+    private String getLatitude(GeocodeResult geocodeResult, Product product) {
         return getGeocodeLocation(geocodeResult, product).getLatitude();
     }
 
-    private String getFormattedAdress(GeocodeResult geocodeResult, Product product){
+    private String getFormattedAdress(GeocodeResult geocodeResult, Product product) {
         return getGeocodeObject(geocodeResult, product).getFormattedAddress();
     }
 
-    private Double getMehrwertSteuer(Product product){
+    private Double getMehrwertSteuer(Product product) {
         return calculatorService.getMehrwertsteuer(product.getPrice());
     }
 
-    private void addMehrwertsteuerToProduct(Product product){
+    private void addMehrwertsteuerToProduct(Product product) {
         product.setMehrwertsteuer(getMehrwertSteuer(product));
     }
 
-    private void addStorageObjectToProduct(Product product){
+    private void addStorageObjectToProduct(Product product) {
         StorageObject storageObject = getStorageObject(product);
-        if(storageObject!=null){
+        if (storageObject != null) {
             addStorageObjectToProduct(storageObject, product);
         }
     }
 
-    private void addStorageObjectToProduct(StorageObject storageObject, Product product){
+    private void addStorageObjectToProduct(StorageObject storageObject, Product product) {
         product.setPlace(storageObject.getPlace());
         product.setDeliveryTime(storageObject.getDuration());
         product.setDeliveryDate(Date.valueOf(LocalDate.now().plusDays(storageObject.getDuration())));
         product.setAmount(storageObject.getAmount());
     }
 
-    private StorageObject getStorageObject(Product product){
-        try{
+    private StorageObject getStorageObject(Product product) {
+        try {
             return storageService.getStorage(product.getId());
-        }catch (IOException e) {}
+        } catch (IOException e) {
+        }
         return null;
     }
 
-    /**
-     * @throws NoSuchElementException wenn kein Produkt mit der id uebereinstimmt
-     */
     public Product getProduct(UUID uuid) throws NoSuchElementException {
         Product product = productRepository.findById(uuid).orElseThrow();
         fillProduct(product);
