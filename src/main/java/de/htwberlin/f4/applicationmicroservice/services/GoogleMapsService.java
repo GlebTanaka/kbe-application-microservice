@@ -20,8 +20,6 @@ import java.util.Objects;
 @Service
 public class GoogleMapsService {
 
-    private final String googleApi = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-
     /**
      * Method to get a GeocodeResult Object in JSON format
      */
@@ -38,6 +36,7 @@ public class GoogleMapsService {
     private String getGoogleUri(String address){
         String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
         String apyKey = getApyKey();
+        String googleApi = "https://maps.googleapis.com/maps/api/geocode/json?address=";
         return googleApi + encodedAddress + "&key=" + apyKey;
     }
 

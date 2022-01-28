@@ -66,15 +66,15 @@ public class ProductService {
 
     private void addGeocodeResultToProduct(GeocodeResult geocodeResult, Product product) {
         addFormattedAddress(geocodeResult, product);
-        addLatidute(geocodeResult, product);
+        addLatitude(geocodeResult, product);
         addLongitude(geocodeResult, product);
     }
 
     private void addFormattedAddress(GeocodeResult geocodeResult, Product product) {
-        product.setFormattedAddress(getFormattedAdress(geocodeResult, product));
+        product.setFormattedAddress(getFormattedAddress(geocodeResult, product));
     }
 
-    private void addLatidute(GeocodeResult geocodeResult, Product product) {
+    private void addLatitude(GeocodeResult geocodeResult, Product product) {
         product.setLat(getLatitude(geocodeResult, product));
     }
 
@@ -111,7 +111,7 @@ public class ProductService {
         return getGeocodeLocation(geocodeResult, product).getLatitude();
     }
 
-    private String getFormattedAdress(GeocodeResult geocodeResult, Product product) {
+    private String getFormattedAddress(GeocodeResult geocodeResult, Product product) {
         return getGeocodeObject(geocodeResult, product).getFormattedAddress();
     }
 

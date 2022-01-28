@@ -21,8 +21,12 @@ import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 @Service
 public class CSVService {
 
+    private final ProductService productService;
+
     @Autowired
-    private ProductService productService;
+    public CSVService(ProductService productService) {
+        this.productService = productService;
+    }
 
     public void exportProduct() throws IOException{
         List<Product> products = productService.getProducts();
