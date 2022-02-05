@@ -7,6 +7,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,12 +22,14 @@ import java.util.Objects;
 @Service
 public class GoogleMapsService {
 
+    Logger logger = LoggerFactory.getLogger(GoogleMapsService.class);
+
     /**
      * Method to get a GeocodeResult Object in JSON format
      */
     public GeocodeResult getGeocode(String address) throws IOException {
         if (address == null) {
-            System.err.println("Connection to Storage Service failed");
+            logger.error("Connection to Storage Service failed. Unable to make request to GoogleMap API without information from Storage Service.");
             return null;
         } 
         Request request = RequestUtil.getGetRequest(getGoogleUri(address));

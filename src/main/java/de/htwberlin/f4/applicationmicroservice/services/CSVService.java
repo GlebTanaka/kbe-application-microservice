@@ -10,6 +10,8 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 public class CSVService {
 
     private final ProductService productService;
+
+    Logger logger = LoggerFactory.getLogger(CSVService.class);
 
     @Autowired
     public CSVService(ProductService productService) {
@@ -49,6 +53,8 @@ public class CSVService {
         StatefulBeanToCsv<Product> beanToCsv = new StatefulBeanToCsvBuilder<Product>(writer).build();
         try {
             beanToCsv.write(products);
-        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {}
+        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+            logger.error("Writing Data into CSV file failed.");
+        }
     }
 }

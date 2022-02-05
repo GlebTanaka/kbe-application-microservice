@@ -9,6 +9,8 @@ import de.htwberlin.f4.applicationmicroservice.models.product.Product;
 import de.htwberlin.f4.applicationmicroservice.models.product.SimpleProduct;
 
 import de.htwberlin.f4.applicationmicroservice.models.storage.StorageObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class ProductService {
     private final CalculatorService calculatorService;
     private final GoogleMapsService googleMapsService;
     private final StorageService storageService;
+
+    Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     @Autowired
     public ProductService(ProductRepository productRepository, CalculatorService calculatorService,
@@ -86,6 +90,7 @@ public class ProductService {
         try {
             return googleMapsService.getGeocode(product.getPlace());
         } catch (IOException e) {
+            logger.error("Connection to GoogleMaps API failed. Unable to get Geolocations");
             return null;
         }
     }
@@ -141,6 +146,7 @@ public class ProductService {
         try {
             return storageService.getStorage(product.getId());
         } catch (IOException e) {
+            logger.error("Connection to Storage Service failed. Unable to make request to GoogleMap API without information from Storage Service.");
         }
         return null;
     }
