@@ -15,7 +15,7 @@ public class CalculatorService {
     Logger logger = LoggerFactory.getLogger(CalculatorService.class);
 
     public Double getMehrwertsteuer(double price) {
-        final String uri = "http://localhost:8081/api/v1/calculator/calculatemehrwertsteuer?preis=" + price;
+        final String uri = "http://host.docker.internal:8081/api/v1/calculator/calculatemehrwertsteuer?preis=" + price;
         RestTemplate restTemplate = new RestTemplate();
         try  {
             return restTemplate.getForObject(uri, Double.class);

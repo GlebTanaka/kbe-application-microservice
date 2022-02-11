@@ -9,6 +9,7 @@ import okhttp3.ResponseBody;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,6 +24,9 @@ import java.util.Objects;
 public class GoogleMapsService {
 
     Logger logger = LoggerFactory.getLogger(GoogleMapsService.class);
+
+    @Value("${my.secret}")
+    private String apiKey;
 
     /**
      * Method to get a GeocodeResult Object in JSON format
@@ -39,21 +43,13 @@ public class GoogleMapsService {
 
     private String getGoogleUri(String address){
         String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
-        String apyKey = getApyKey();
         String googleApi = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-        return googleApi + encodedAddress + "&key=" + apyKey;
+        return googleApi + encodedAddress + "&key=" + apiKey;
     }
 
     private GeocodeResult getGeocodeResult(ResponseBody responseBody) throws IOException{
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(Objects.requireNonNull(responseBody).string(), GeocodeResult.class);
-    }
-
-    @Nullable
-    private String getApyKey() {
-        Dotenv dotenv;
-        dotenv = Dotenv.configure().load();
-        return dotenv.get("API_KEY");
     }
 }
 

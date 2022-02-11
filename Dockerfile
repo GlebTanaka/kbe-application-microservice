@@ -9,8 +9,9 @@ WORKDIR /workspace/app/src/
 # Copy files
 COPY src ./
 COPY pom.xml ../
+COPY .env ../
 
-# ./mvnw clean package -DskipTests  eventuell so -Dmaven.test.skip=true
+# ./mvnw clean package -DskipTests
 RUN mvn -f /workspace/app/pom.xml clean package -Dmaven.test.skip=true
 
 #### 2nd Stage ####

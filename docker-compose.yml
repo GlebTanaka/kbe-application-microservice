@@ -30,5 +30,6 @@ services:
       DATABASE_URL: postgresql://postgres:5432/productdb
       DATABASE_USER: user
       DATABASE_PASSWORD: password
+      GOOGLE_API_KEY: ${API_KEY}
     ports:
       - "8080:3030"

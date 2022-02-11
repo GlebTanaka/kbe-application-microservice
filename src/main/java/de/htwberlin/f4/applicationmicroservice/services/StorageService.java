@@ -20,7 +20,7 @@ import java.util.UUID;
 @Service
 public class StorageService {
 
-    private final String storageApi = "http://localhost:8084/api/v1/storage/product/";
+    private final String storageApi = "http://host.docker.internal:8084/api/v1/storage/product/";
 
     Logger logger = LoggerFactory.getLogger(StorageService.class);
 
